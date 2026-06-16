@@ -22,17 +22,11 @@ jobs:
         key: ${{ runner.os }}-buildozer-${{ hashFiles('**/buildozer.spec') }}
 
     - name: Compilar APK con Buildozer Action
-      uses: RafaelBlanco/action-kivy-apk@v1.1.0
+      uses: nttdocomo/buildozer-action@main
       id: buildozer
       with:
         command: buildozer android debug
         repository_root: .
-
-    - name: Subir APK generado como artefacto
-      uses: actions/upload-artifact@v4
-      with:
-        name: QuizGen-IA-APK
-        path: ${{ steps.buildozer.outputs.filename }}
 
     - name: Subir APK generado como artefacto
       uses: actions/upload-artifact@v4
