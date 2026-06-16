@@ -7,26 +7,34 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Descargar codigo del repositorio
       uses: actions/checkout@v4
 
-    - name: Configurar Cache para Buildozer
-      uses: actions/cache@v4
+    - name: Configurar Python
+      uses: actions/setup-python@v5
       with:
-        path: |
-          ~/.ccache
-          ~/.buildozer
-        key: ${{ runner.os }}-buildozer-${{ hashFiles('**/buildozer.spec') }}
+        python-version: '3.10'
 
-    - name: Compilar APK con Buildozer Action
-      uses: nttdocomo/buildozer-action@main
-      id: buildozer
+    - name: Instalar dependencias del sistema y Buildozer
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ccache git libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev po-debconf libgmp-dev libltdl-dev default-jdk shared-mime-info zip unzip
+        pip install --user --upgrade buildozer cython virtualenv
+
+    - name: Compilar APK con Buildozer
+      run: |
+        export PATH=$PATH:~/.local/bin
+        buildozer android debug
+      continue-on-error: false
+
+    - name: Subir APK generado como artefacto
+      uses: actions/upload-artifact@v4
       with:
-        command: buildozer android debug
-        repository_root: .
+        name: QuizGen-IA-APK
+        path: bin/*.apk
 
     - name: Subir APK generado como artefacto
       uses: actions/upload-artifact@v4
