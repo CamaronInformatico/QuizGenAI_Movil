@@ -22,7 +22,7 @@ jobs:
         key: ${{ runner.os }}-buildozer-${{ hashFiles('**/buildozer.spec') }}
 
     - name: Compilar APK con Buildozer Action
-      uses: ArtemGovorov/buildozer-action@v1
+      uses: RafaelBlanco/action-kivy-apk@v1.1.0
       id: buildozer
       with:
         command: buildozer android debug
