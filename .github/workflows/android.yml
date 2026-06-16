@@ -33,3 +33,9 @@ jobs:
       with:
         name: QuizGen-IA-APK
         path: ${{ steps.buildozer.outputs.filename }}
+
+    - name: Subir APK generado como artefacto
+      uses: actions/upload-artifact@v4
+      with:
+        name: QuizGen-IA-APK
+        path: ${{ steps.buildozer.outputs.filename }}
